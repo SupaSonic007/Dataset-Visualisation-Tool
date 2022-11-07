@@ -102,7 +102,7 @@ if sort_columns:
 
 # Create the plot and save it
 scatter = sb.scatterplot(x=x, y=y, hue=hue or None,
-                         data=ds, palette=palette)
+                         data=ds)
 scatter.set(ylim=(float(ymin or ds[y].min()), float(ymax or ds[y].max())), xlim=(float(
     xmin or ds[x].min()), float(xmax or ds[x].max())), xlabel=(xName or None), ylabel=(yName or None), title=name)
 plt.legend(loc="upper right")
