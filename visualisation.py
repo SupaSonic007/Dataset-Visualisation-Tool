@@ -22,7 +22,7 @@ def format_dates(date: str, date_length=True) -> pd.Series:
 
 # Initialise tkinter without a window and grab the file/s
 tk.Tk().withdraw()
-files = askopenfilenames()
+files = askopenfilenames(filetypes=[("CSV", "*.csv")])
 
 # Split the files into their own datasets and then concatenate them if there is more than one
 datasets = []
@@ -42,21 +42,22 @@ if isinstance(datasets, list):
 # +----+----+----+
 
 # Init columns
-columns = "+"
-print(ds.columns)
 table = Table(ds)
 # Print columns and indexes
 print(table)
 
-# Ask X and Y columns and Hue
+# Grab column data
 print("\n X:")
 col1 = input("> ")
 xName = input("X Name or None (blank): ")
+
 print("\n Y:")
 col2 = input("> ")
 yName = input("Y Name or None (blank): ")
+
 print("\n Hue (Leave blank for None):")
 hue = input("> ")
+
 print("\n Sample Size (0.00-1.00)")
 sample = input("> ")
 
@@ -65,12 +66,13 @@ sample = input("> ")
 if hue:
     [hue] = get_column_names([hue])
 
+# Sorting doesn't do anything yet but will hopefully be implemented later on
 print("\n Sort by column/s (seperated by ',' if multiple or blank for none)")
 sort_columns = input("> ")
 if sort_columns:
     [sort_columns] = get_column_names([sort_columns])
 
-
+# Limit the graph to a specific section of the data
 print("\n Limit x (min: %s, max:%s)" % (ds[x].min(), ds[x].max()))
 xmin = input("X min: ")
 xmax = input("X max: ")
@@ -79,13 +81,14 @@ print("\n Limit y (min: %s, max:%s)" % (ds[y].min(), ds[y].max()))
 ymin = input("Y min: ")
 ymax = input("Y max: ")
 
+# Name the graph
 print("\nName of graph:")
 name = input("Name: ")
 
 # Sample before formatting for less stress on computer
 ds = ds.sample(frac=float(sample))
 
-# If type is date, else only use month and year
+# If hue is date, only use month and year
 if "date" in hue.lower():
     dates = ds[hue].to_list()
     if len(dates[0].split("-")[0]) == 4:
